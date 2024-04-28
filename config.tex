@@ -1,0 +1,266 @@
+% ************************************************************************
+% ************************************************************************
+% ************************************************************************
+%
+% CONFIG
+%
+% ************************************************************************
+% ************************************************************************
+% ************************************************************************
+
+\documentclass{article}
+
+% ************************************************************************
+%
+% STANDARD PACKAGES
+%
+% ************************************************************************
+
+% Simple arithmetic in latex commands
+\usepackage{calc}
+
+% Logical operations
+\usepackage{ifthen}
+
+
+% ************************************************************************
+%
+% GENERAL FORMATTING PACKAGES
+%
+% ************************************************************************
+
+% Additional listings, enumaration options
+\usepackage{listings}		
+\usepackage{enumerate}	
+\usepackage[shortlabels]{enumitem}
+
+% Hyperlinked references
+\usepackage[%dviwindo,%
+breaklinks=true,%
+colorlinks=true,%
+hyperindex=true,%
+plainpages=false,%
+linkcolor=black,%
+citecolor=black]{hyperref}
+
+% Extended verbatim environments
+\usepackage{fancyvrb}
+%\usepackage[fancyvrb]{listings}
+
+% Dropped capital letter at beginning of paragraph
+\usepackage{lettrine}
+
+% ***********************
+%
+% HIGHLIGHTING
+%
+
+% Colored text, highlighted text
+\usepackage{soul}
+
+% For highlighting text, tables
+\usepackage[table]{xcolor}
+
+% Large color box environments
+\usepackage[breakable]{tcolorbox}
+
+
+% ***********************
+%
+% PAGE LAYOUT
+%
+
+\voffset=0.5in%
+\topmargin=-1.0in%
+\textheight=9.0in %
+
+\hoffset=0.0in %
+\textwidth=6.5in %
+\oddsidemargin=0.0in %
+\evensidemargin=0.0in %
+
+% Initialize page counter
+\setcounter{page}{1}
+
+% ***********************
+%
+% MISC
+%
+% From previous versions of the lab assignments
+%
+
+\usepackage{curves}
+\usepackage{fancyhdr}
+\usepackage{eepic,eepicemu}
+\usepackage{makeidx}
+
+\lstloadlanguages{Matlab,C++}
+
+\newboolean{inappendix}
+\setboolean{inappendix}{false}
+
+% ************************************************************************
+%
+% MATH/EQUATION PACKAGES AND FORMATTING
+%
+% ************************************************************************
+
+% Basic math symbols
+\usepackage{gensymb}
+\usepackage{amssymb}
+
+% Math tools
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{amsmath, amsfonts}
+
+% Math definitions
+\newcommand{\defas} {\buildrel \rm def \over =}
+\newcommand{\magn}[1]{\left\vert #1\right\vert}
+\newcommand{\norm}[1]{\left\Vert #1\right\Vert}
+\newcommand{\Linf}{{\cal L}^\infty}
+\newcommand{\Ltwo}{{\cal L}^2}
+\newcommand{\Hinf}{{\cal H}^\infty}
+\newcommand{\RHinf}{{\cal R}\Hinf}
+\newcommand{\Htwo}{{\cal H}^2}
+\newcommand{\Lone}{{\cal L}^1}
+\newcommand{\Hone}{{\cal H}^1}
+\newcommand{\wstar} {\buildrel {\rm weak}^*  \over \longrightarrow}
+\newcommand{\compact} {\buildrel {\rm compact}  \over \longrightarrow}
+
+% The following package (accents) and command (ubar) is added to get ``bar'' underneath some symbols/text in Math environment (E.g., for indicating minimum singular value \ubar{\sigma})
+\usepackage{accents} 
+\newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
+
+
+
+% ************************************************************************
+%
+% FIGURE/TABLE FORMATTING PACKAGES
+%
+% ************************************************************************
+
+
+\usepackage{graphicx}
+
+% Figure controls
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Figure placement
+\usepackage{float}
+\usepackage{placeins} 
+
+% Wrap figures/tables in text (i.e., Di Vinci style)
+\usepackage{wrapfig}
+
+% Suppress sub-figure labeling: (a), (b), etc.
+\captionsetup[subfigure]{labelformat=empty}
+
+% For tables
+\usepackage{hhline} 		% Custom horizontal lines in tables
+\usepackage{multirow}		% Multirow feature in tables
+\usepackage{chngpage}
+\usepackage{lscape} 		% Turn page contents to landscape
+%\usepackage{slashbox} 		% For boxes with a slash and 2 subcells (e.g., for axis labels)
+
+% For footnotes
+\usepackage{tablefootnote} 	% For footnotes in tables. Use \tablefootnote{} command
+
+% For algorithms
+\usepackage{algpseudocode}
+
+% For background highlight in figures
+% See:   https://tex.stackexchange.com/questions/510775/how-to-change-the-background-color-of-a-figure-in-latex
+%
+%\begin{figure}[h]
+%	\begin{center}
+%	\begin{mdframed}[backgroundcolor=blue!50,linecolor=blue!50]     % ***********
+%		\begin{tabular}{l}
+%			\includegraphics[height=\figsize]{example-image-a4-landscape.pdf}	
+%		\end{tabular}
+%	\end{mdframed}                                                  % ***********
+%	\end{center}
+%	\caption{ZZZ.}
+%	\label{fig:}	
+%\end{figure}
+%
+\usepackage{mdframed}
+
+% For increasing padding above/below elements in a table
+% https://tex.stackexchange.com/questions/126539/padding-at-the-top-of-a-table-cell-in-latex
+\newcommand\Tstrut{\rule{0pt}{2.6ex}}       % "top" strut
+\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}} % "bottom" strut
+\newcommand{\TBstrut}{\Tstrut\Bstrut} % top&bottom struts
+% \begin{tabular}{|l|l|l|}
+%  \hline
+%  A  & B  & C \TBstrut\\ % top and bottom struts
+%  \hline
+%  A1 & B1 & C1 \Tstrut\\ % top strut only
+%  A2 & B2 & C2 \Bstrut\\ % bottom strut only
+%  \hline
+% \end{tabular}
+
+
+% ****** Definition for EPS Inclusion *****************
+
+\newcommand{\seteps}[4]{\hspace*{#1}\relax{
+  \includegraphics*[width=#2, height=#3]{#4}\par}
+}
+
+\newcommand{\centereps}[3]{\relax{\par\centering
+  \includegraphics*[width=#1, height=#2]{#3}\par}
+}
+
+% *****************************************************
+
+% ****** Definition for BMP Inclusion *****************
+
+\newdimen\dwidth
+\newdimen\dheight
+
+\def\showbmp#1#2#3{%
+\dwidth=#2\dheight=#3
+\edef\width{\number\dwidth} \edef\height{\number\dheight}%
+\special{insertimage: #1 \width \space \height}}
+
+\def\setbmp#1#2#3#4{\vskip#3\relax\noindent\hskip#1\relax
+ \showbmp{#4}{#2}{#3}\hfil}
+
+\def\centerbmp#1#2#3{\vskip#2\relax\centerline{\hbox%
+to#1{\showbmp{#3}{#1}{#2}\hfil}}}
+% *****************************************************
+
+% ****** Definition for WMF Inclusion *****************
+
+\newcommand{\setwmf}[4]{\hspace*{#1}\relax{
+  \includegraphics*[width=#2, height=#3]{#4}\par}
+}
+
+\newcommand{\centerwmf}[3]{\relax{\par\centering
+  \includegraphics*[width=#1, height=#2]{#3}\par}
+}
+
+% ************************************************************************
+%
+% TIKZ
+%
+% ************************************************************************
+
+\include{\relpathconfig config_tikz}
+
+
+
+
+% ************************************************************************
+%
+% CUSTOM COMMANDS
+%
+% ************************************************************************
+
+% UGM, DGM, PM, DM
+\DeclareMathOperator{\DGM}{\downarrow \!\! \mathit{GM}}
+\DeclareMathOperator{\UGM}{\uparrow \!\! \mathit{GM}}
+\DeclareMathOperator{\PM}{\mathit{PM}}
+\DeclareMathOperator{\DM}{\mathit{DM}}
+

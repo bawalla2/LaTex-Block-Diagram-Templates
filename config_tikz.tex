@@ -1,0 +1,194 @@
+% ************************************************************************
+% ************************************************************************
+% ************************************************************************
+%
+% CONFIG -- TIKZ
+%
+% ************************************************************************
+% ************************************************************************
+% ************************************************************************
+
+% ************************************************************************
+% ************************************************************************
+%
+% GENERAL
+%
+% ************************************************************************
+% ************************************************************************
+
+\usepackage{tikz}				% For block diagrams
+\usepackage{xfp}				% For floating point calculations
+
+%\usetikzlibrary{spath3}
+
+% Extra arrow heads, snakes, backgrounds
+% https://www.bu.edu/math/files/2013/08/tikzpgfmanual.pdf 		pp 35
+\usetikzlibrary{arrows,decorations,backgrounds,arrows.meta}
+% For calculations
+\usetikzlibrary{calc}
+% To prevent bending issue when plotting arrows midway through an arc
+% https://tex.stackexchange.com/questions/345749/tikz-arc-with-latex-arrow-tip
+\usetikzlibrary{bending}
+% For calculating angles
+% https://tex.stackexchange.com/questions/253200/drawing-a-circular-arc-between-two-rays
+\usetikzlibrary{angles,positioning,intersections,quotes,decorations.markings}
+% For matrices
+% https://tex.stackexchange.com/questions/291714/colored-box-around-a-column-in-matrix
+\usetikzlibrary{matrix}
+% For "picture" environment commands (e.g., \circle)
+% https://www.overleaf.com/learn/latex/Picture_environment
+\usepackage[pdftex]{pict2e}
+
+% ************************************************************************
+% ************************************************************************
+%
+% TIKZ -- DIMENSIONS, CONSTANTS, ETC.
+%
+% ************************************************************************
+% ************************************************************************
+
+% ***********************
+%
+% SIZING
+%
+
+\newdimen\Linewidth \Linewidth = 0.2mm
+\newdimen\Linewidthbf \Linewidthbf = 0.6mm
+\newdimen\Linewidthtick \Linewidthtick = 0.3mm
+\newdimen\Linewidthpz \Linewidthpz = 0.4mm
+\newdimen\Shiftarrowbf \Shiftarrowbf = 1.5mm
+\newdimen\Shiftlabely \Shiftlabely = -5mm
+\newdimen\Shiftlabelx \Shiftlabelx = 8mm
+\newdimen\Radcirc \Radcirc = 3cm
+\newcommand{\Arrowbf}{{latex[width=2mm]}}
+
+% ***********************
+%
+% SIZING -- BLOCK DIAGRAMS
+%
+
+\newcommand\blockdiagramdimendefault{%
+\xdef\bdcirclediameter{1}
+\xdef\bdarrowlength{4}
+\xdef\bdhorizlabeloffsetx{1.5}
+\xdef\bdhorizlabeloffsety{0.5}
+\xdef\bdvertlabeloffsetx{\bdhorizlabeloffsety}
+\xdef\bdvertlabeloffsety{-\bdhorizlabeloffsetx}
+\xdef\bdboxwidth{5}
+\xdef\bdboxheight{4}
+\xdef\bdboxlabeloffsety{-1}
+\xdef\feedbackpathheight{6}
+\xdef\bdarrowlengthup{2.5}
+}
+
+% ***********************
+%
+% DRAW COMMANDS
+%
+
+\def\crosspath{+(-1.4ex,-1.4ex) -- +(1.4ex,1.4ex) +(1.4ex,-1.4ex) -- +(-1.4ex,1.4ex)}
+\def\vtick{+(0,-1.4ex) -- +(0,1.4ex)}
+\def\htick{+(-1.4ex,0) -- +(1.4ex,0)}
+\tikzstyle{zero}=[circle,draw=black,fill=white,line width = \Linewidthpz,inner sep=0pt, minimum size=1.4ex]
+\tikzstyle{point}=[circle,draw=black,fill=black,line width = \Linewidthpz,inner sep=0pt, minimum size=0.5ex]
+
+
+
+% ************************************************************************
+%
+% TIKZ -- FUNCTIONALITY COMMANDS
+%
+% ************************************************************************
+
+% PGF Layers
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+% ***********************
+%
+% COORDINATE CALCULATIONS
+%
+
+% Current coordinate
+% https://tex.stackexchange.com/questions/132924/using-current-path-position-in-coordinate-calculation
+\makeatletter
+\newcommand\currentcoordinate{\the\tikz@lastxsaved,\the\tikz@lastysaved}
+\makeatother
+\makeatletter
+\newcommand\currentcoordinatex{\the\tikz@lastxsaved}
+\makeatother
+\makeatletter
+\newcommand\currentcoordinatey{\the\tikz@lastysaved}
+\makeatother
+
+% Extract x and y values from coordinate
+% https://tex.stackexchange.com/questions/56353/extract-x-y-coordinate-of-an-arbitrary-point-on-curve-in-tikz
+% \gettikzxy{(<coord name>)}{\<storage name x>}{\<storage name y>}
+% E.g.,
+% \gettikzxy{(A)}{\ax}{\ay}
+% \gettikzxy{(B)}{\bx}{\by}
+\makeatletter
+\newcommand{\gettikzxy}[3]{%
+  \tikz@scan@one@point\pgfutil@firstofone#1\relax
+  \edef#2{\the\pgf@x}%
+  \edef#3{\the\pgf@y}%
+}
+\makeatother
+%
+% (x, y) in cm
+%
+\newcommand{\gettikzxycm}[3]{%
+	\gettikzxy{#1}{#2}{#3}%
+	\xdef#2{\fpeval{round(#2*1pt/1cm,6)}}%
+	\xdef#3{\fpeval{round(#3*1pt/1cm,6)}}%
+}
+%
+% Return x, y in cm
+\newcommand\currentcoordinatexcm{\fpeval{\currentcoordinatex*1pt/1cm}}
+\newcommand\currentcoordinateycm{\fpeval{\currentcoordinatey*1pt/1cm}}
+
+% Use macro to set style attributes of a \draw command
+% https://tex.stackexchange.com/questions/456259/using-a-macro-with-tikz-style-attributes-in-a-draw-command
+% Example:
+% \def\styleattributes{fill=blue,opacity=0.8}
+% \begin{tikzpicture}
+%   \draw[apply style/.expand once=\styleattributes] (0,0) rectangle (1,1);
+% \end{tikzpicture}
+\tikzset{apply style/.code={\tikzset{#1}}}
+
+
+
+% ***********************
+%
+% MACRO: CHECK IF PGFKEY EMPTY
+%
+% \ifpgfkeyempty{<key>}{<true case>}{<false case>}
+%
+% https://tex.stackexchange.com/questions/523512/detecting-empty-pgfkeys
+%  
+
+\makeatletter
+\def\ifempty#1{%
+    \xdef\temp{#1}%
+    \ifx\temp\empty
+       \expandafter\@firstoftwo
+    \else
+       \expandafter\@secondoftwo
+    \fi
+}
+
+\def\ifpgfkeyempty#1{%
+    \pgfkeysgetvalue{#1}{\temp}%
+    \ifx\temp\empty
+       \expandafter\@firstoftwo
+    \else
+       \ifx\temp\relax
+           \expandafter\expandafter\expandafter\@firstoftwo
+       \else
+           \expandafter\expandafter\expandafter\@secondoftwo
+       \fi
+    \fi
+}
+\makeatother
+
